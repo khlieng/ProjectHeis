@@ -23,18 +23,19 @@ namespace ProjectHeis
             KeyboardState keyboard = Keyboard.GetState();
 
             if (prevKeyboard.IsKeyUp(Keys.Space) &&
-                keyboard.IsKeyDown(Keys.Space))
+                keyboard.IsKeyDown(Keys.Space) //&&
+                /*entity.Floored*/)
             {
                 entity.VelocityY = 4;
             }
 
             if (keyboard.IsKeyDown(Keys.W))
             {
-                entity.Position += entity.Direction * (float)gameTime.ElapsedGameTime.TotalSeconds * 50.0f;
+                entity.Position += entity.Direction * (float)gameTime.ElapsedGameTime.TotalSeconds * 120.0f;
             }
             else if (keyboard.IsKeyDown(Keys.S))
             {
-                entity.Position -= entity.Direction * (float)gameTime.ElapsedGameTime.TotalSeconds * 50.0f;
+                entity.Position -= entity.Direction * (float)gameTime.ElapsedGameTime.TotalSeconds * 120.0f;
             }
 
             if (keyboard.IsKeyDown(Keys.A))
