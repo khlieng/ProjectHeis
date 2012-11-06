@@ -26,16 +26,16 @@ namespace ProjectHeis
                 keyboard.IsKeyDown(Keys.Space) //&&
                 /*entity.Floored*/)
             {
-                entity.VelocityY = 4;
+                entity.VelocityY = 2;
             }
 
             if (keyboard.IsKeyDown(Keys.W))
             {
-                entity.Position += entity.Direction * (float)gameTime.ElapsedGameTime.TotalSeconds * 120.0f;
+                entity.Position += entity.Direction * (float)gameTime.ElapsedGameTime.TotalSeconds * 40.0f;
             }
             else if (keyboard.IsKeyDown(Keys.S))
             {
-                entity.Position -= entity.Direction * (float)gameTime.ElapsedGameTime.TotalSeconds * 120.0f;
+                entity.Position -= entity.Direction * (float)gameTime.ElapsedGameTime.TotalSeconds * 40.0f;
             }
 
             if (keyboard.IsKeyDown(Keys.A))

@@ -16,8 +16,8 @@ namespace ProjectHeis
         public Matrix View { get; set; }
         public Matrix Projection { get; set; }
 
-        private float distance = 200.0f;
-        private float height = 50.0f;
+        private float distance = 100.0f;
+        private float height = 20.0f;
 
         public Camera(Game game, Entity entity)
             : base(game)

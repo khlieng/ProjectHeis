@@ -27,7 +27,7 @@ namespace ProjectHeis
         {
             effect = Game.Content.Load<Effect>("effects");
             skyDome = Game.Content.Load<Model>("dome"); skyDome.Meshes[0].MeshParts[0].Effect = effect.Clone();
-            cloudMap = Game.Content.Load<Texture2D>("cloudMap");
+            cloudMap = Game.Content.Load<Texture2D>("dome1");
             base.LoadContent();
         }
 

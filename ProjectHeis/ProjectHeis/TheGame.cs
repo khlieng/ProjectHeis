@@ -30,6 +30,8 @@ namespace ProjectHeis
 
         public static Camera Camera { get; private set; }
 
+        private BloomComponent bloom;
+
         public TheGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -52,6 +54,11 @@ namespace ProjectHeis
             graphics.ApplyChanges();
 
             effect = new BasicEffect(GraphicsDevice);
+
+            bloom = new BloomComponent(this);
+            bloom.Settings = BloomSettings.PresetSettings[5];
+            bloom.Initialize();
+            Components.Add(bloom);
         }
         Entity player;
         Entity floor;
@@ -70,18 +77,31 @@ namespace ProjectHeis
             floor.Scale = new Vector3(1f, 0.5f, 1f);
             floor.Position = new Vector3(0, -40, 0);
 
+            Entity wall = new Entity(this, box);
+            wall.Position = new Vector3(100, 450, 0);
+            wall.Scale = new Vector3(0.02f, 5, 1);
+            Entity wall2 = new Entity(this, box);
+            wall2.Position = new Vector3(0, 450, 100);
+            wall2.Scale = new Vector3(1, 5, 0.02f);
+            Entity wall3 = new Entity(this, box);
+            wall3.Position = new Vector3(0, 450, -100);
+            wall3.Scale = new Vector3(1, 5, 0.02f);
+
+            //Entity wall4 = new Entity(this, box);
+            
+
             floor2 = new Entity(this, box);
-            floor2.Position = new Vector3(160, 0, 0);
-            floor2.Scale = new Vector3(0.2f, 0.005f, 0.2f);
+            floor2.Position = new Vector3(0, 50, 0);
+            floor2.Scale = new Vector3(1f, 0.02f, 1f);
 
             Entity floor3 = new Entity(this, box);
-            floor3.Position = new Vector3(240, 0, 0);
-            floor3.Scale = new Vector3(0.2f, 0.005f, 0.2f);
+            floor3.Position = new Vector3(0, 100, 0);
+            floor3.Scale = new Vector3(1f, 0.02f, 1f);
 
             player = new Entity(this, box);
             player.Position = new Vector3(0, 100, 0);
             player.Controller = new KeyboardController(player);
-            player.Scale = new Vector3(0.1f);
+            player.Scale = new Vector3(0.01f, 0.02f, 0.01f);
             player.Gravity = true;
 
             Entity tree = new Entity(this, treeModel);
@@ -102,6 +122,7 @@ namespace ProjectHeis
             staticEntities.Add(floor);
             staticEntities.Add(floor2);
             staticEntities.Add(floor3);
+            staticEntities.Add(wall);
             movingEntities.Add(player);
 
             Camera = new Camera(this, player);
@@ -192,6 +213,8 @@ namespace ProjectHeis
             {
                 DepthBufferEnable = true
             };
+
+            bloom.BeginDraw();
 
             device.Clear(Color.Black);
             
