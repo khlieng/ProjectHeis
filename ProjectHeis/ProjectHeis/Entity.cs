@@ -21,6 +21,19 @@ namespace ProjectHeis
         private Matrix world;
         private Model model;
 
+        private Vector3 color;
+        public Color Color
+        {
+            get 
+            {
+                return new Color(color);
+            }
+            set 
+            {
+                color = new Vector3(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f);
+            }
+        }
+
         public IController Controller { get; set; }
 
         public Entity(Game game, Model model)
@@ -30,13 +43,20 @@ namespace ProjectHeis
             Scale = Vector3.One;
             Direction = Vector3.Forward;
             Gravity = false;
+            Color = Color.DarkGray;
+            
+            Initialize();
 
             Game.Components.Add(this);
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
+
         public override void Update(GameTime gameTime)
         {
-            
             if (Controller != null)
             {
                 Controller.Update(gameTime);
@@ -46,11 +66,8 @@ namespace ProjectHeis
             {
                 VelocityY -= 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Position += new Vector3(0, VelocityY, 0);
-
-                /*if (Position.Y < 0)
-                    Position = new Vector3(Position.X, 0, Position.Z);*/
             }
-
+            
             base.Update(gameTime);
         }
 
@@ -59,8 +76,14 @@ namespace ProjectHeis
             world = Matrix.CreateScale(Scale) * Matrix.CreateRotationY(Rotation) * Matrix.CreateTranslation(Position);
 
             BB = UpdateBoundingBox(model, Matrix.CreateScale(Scale) * Matrix.CreateTranslation(Position));
-            
+
+            BasicEffect e = (BasicEffect)model.Meshes[0].Effects[0];
+            Vector3 prev = e.DiffuseColor;
+            e.DiffuseColor = color;
+
             model.Draw(world, TheGame.Camera.View, TheGame.Camera.Projection);
+
+            e.DiffuseColor = prev;
 
             base.Draw(gameTime);
         }

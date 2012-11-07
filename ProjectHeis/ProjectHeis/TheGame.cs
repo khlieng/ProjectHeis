@@ -25,6 +25,10 @@ namespace ProjectHeis
         private SpriteFont font;
         public static string info = "TEST";
 
+        private Entity player;
+        private Entity floor;
+        private Entity[] floors;
+
         private List<Entity> movingEntities = new List<Entity>();
         private List<Entity> staticEntities = new List<Entity>();
 
@@ -51,6 +55,7 @@ namespace ProjectHeis
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
             graphics.IsFullScreen = false;
+            graphics.PreferMultiSampling = true;
             graphics.ApplyChanges();
 
             effect = new BasicEffect(GraphicsDevice);
@@ -60,9 +65,7 @@ namespace ProjectHeis
             bloom.Initialize();
             Components.Add(bloom);
         }
-        Entity player;
-        Entity floor;
-        Entity floor2;
+        
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -72,9 +75,17 @@ namespace ProjectHeis
             (box.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
             treeModel = Content.Load<Model>("tree");
             (treeModel.Meshes[0].MeshParts[0].Effect as BasicEffect).EnableDefaultLighting();
+            
+            
+            player = new Entity(this, box);
+            player.Position = new Vector3(0, 100, 0);
+            player.Controller = new KeyboardController(player);
+            player.Scale = new Vector3(0.01f, 0.02f, 0.01f);
+            player.Gravity = true;
+            player.Color = Color.Purple;
 
             floor = new Entity(this, box);
-            floor.Scale = new Vector3(1f, 0.5f, 1f);
+            floor.Scale = new Vector3(0.99f, 0.5f, 0.99f);
             floor.Position = new Vector3(0, -40, 0);
 
             Entity wall = new Entity(this, box);
@@ -86,24 +97,23 @@ namespace ProjectHeis
             Entity wall3 = new Entity(this, box);
             wall3.Position = new Vector3(0, 450, -100);
             wall3.Scale = new Vector3(1, 5, 0.02f);
+            Entity wall4 = new Entity(this, box);
+            wall4.Position = new Vector3(-100, 500, 20);
+            wall4.Scale = new Vector3(0.02f, 4.5f, 0.8f);
 
-            //Entity wall4 = new Entity(this, box);
+            floors = new Entity[20];
+            for (int i = 0; i < floors.Length; i++)
+            {
+                floors[i] = new Entity(this, box);
+                floors[i].Position = new Vector3(0, i * 50, 0);
+                floors[i].Scale = new Vector3(0.99f, 0.02f, 0.99f);
+            }
+
+            Entity elevator = new Entity(this, box);
+            elevator.Color = Color.LimeGreen;
+            elevator.Scale = new Vector3(0.2f, 0.02f, 0.2f);
+            elevator.Position = new Vector3(-120, 8, -78);
             
-
-            floor2 = new Entity(this, box);
-            floor2.Position = new Vector3(0, 50, 0);
-            floor2.Scale = new Vector3(1f, 0.02f, 1f);
-
-            Entity floor3 = new Entity(this, box);
-            floor3.Position = new Vector3(0, 100, 0);
-            floor3.Scale = new Vector3(1f, 0.02f, 1f);
-
-            player = new Entity(this, box);
-            player.Position = new Vector3(0, 100, 0);
-            player.Controller = new KeyboardController(player);
-            player.Scale = new Vector3(0.01f, 0.02f, 0.01f);
-            player.Gravity = true;
-
             Entity tree = new Entity(this, treeModel);
             tree.Scale = new Vector3(0.15f);
             tree.Position = new Vector3(50, 10, 50);
@@ -120,9 +130,15 @@ namespace ProjectHeis
             skyDome.Initialize();
 
             staticEntities.Add(floor);
-            staticEntities.Add(floor2);
-            staticEntities.Add(floor3);
+            for (int i = 0; i < floors.Length; i++)
+            {
+                staticEntities.Add(floors[i]);
+            }
             staticEntities.Add(wall);
+            staticEntities.Add(wall2);
+            staticEntities.Add(wall3);
+            staticEntities.Add(wall4);
+            staticEntities.Add(elevator);
             movingEntities.Add(player);
 
             Camera = new Camera(this, player);
@@ -184,7 +200,6 @@ namespace ProjectHeis
                                 m.Position += projection;
                                 break;
                         }
-
                     }
                     if (m.VelocityY != 0)
                         m.Floored = false;
@@ -195,7 +210,7 @@ namespace ProjectHeis
             info += "\nX: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z;
             info += "\npMin: " + player.BB.Min + ", pMax: " + player.BB.Max;
             info += "\nf1Min: " + floor.BB.Min + ", f1Max: " + floor.BB.Max;
-            info += "\nf2Min: " + floor2.BB.Min + ", f2Max: " + floor2.BB.Max;
+            //info += "\nf2Min: " + floor2.BB.Min + ", f2Max: " + floor2.BB.Max;
             info += "\nPlayer floored: " + player.Floored;
 
             base.Update(gameTime);

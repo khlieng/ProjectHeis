@@ -22,17 +22,15 @@ namespace ProjectHeis
                 new VertexElement(sizeof(float) * 3 + 4, VertexElementFormat.Vector3, VertexElementUsage.Normal, 0)
             );
         }
-
+        
+        VertexPositionColorNormal[] vertices;
         int[] indices;
 
-        private float angle = 0f;
         private int terrainWidth = 4;
         private int terrainHeight = 3;
         private float[,] heightData;
 
         Effect effect;
-
-        VertexPositionColorNormal[] vertices;
 
         public Terrain(Game game)
             : base(game)
@@ -41,13 +39,11 @@ namespace ProjectHeis
 
         public override void Initialize()
         {
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-
             effect = Game.Content.Load<Effect>("effects");
             Texture2D heightMap = Game.Content.Load<Texture2D>("terrain3");
             LoadHeightData(heightMap);
@@ -63,17 +59,14 @@ namespace ProjectHeis
             Matrix worldMatrix = Matrix.CreateScale(12.0f) * Matrix.CreateTranslation(-1500, -30, 2500) * Matrix.CreateTranslation(5.0f, -5.0f, 0.0f);
             effect.CurrentTechnique = effect.Techniques["Colored"];
 
-
-
             effect.Parameters["xView"].SetValue(TheGame.Camera.View);
             effect.Parameters["xProjection"].SetValue(TheGame.Camera.Projection);
             effect.Parameters["xWorld"].SetValue(worldMatrix);
-            Vector3 lightDirection = new Vector3(1.0f, -1.0f, -1.0f);
+            Vector3 lightDirection = new Vector3(0.0f, -1.0f, -1.0f);
             lightDirection.Normalize();
             effect.Parameters["xLightDirection"].SetValue(lightDirection);
             effect.Parameters["xAmbient"].SetValue(0.1f);
             effect.Parameters["xEnableLighting"].SetValue(true);
-
 
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
