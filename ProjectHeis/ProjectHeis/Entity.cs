@@ -11,6 +11,14 @@ namespace ProjectHeis
     {
         public float Rotation { get; set; }
         private Vector3 position;
+
+        public Texture2D Texture { get; set; }
+
+
+        
+
+       
+
         public Vector3 Position
         {
             get
@@ -92,6 +100,12 @@ namespace ProjectHeis
 
         public override void Draw(GameTime gameTime)
         {
+            if (Texture != null)
+            {
+                BasicEffect b = (BasicEffect)model.Meshes[0].Effects[0];
+                b.TextureEnabled = true;
+                b.Texture = Texture;
+            }
             world = Matrix.CreateScale(Scale) * Matrix.CreateRotationY(Rotation) * Matrix.CreateTranslation(Position);
 
             /*BB = UpdateBoundingBox(model, Matrix.CreateScale(Scale) * Matrix.CreateTranslation(Position));*/
@@ -99,9 +113,10 @@ namespace ProjectHeis
             BasicEffect e = (BasicEffect)model.Meshes[0].Effects[0];
             Vector3 prev = e.DiffuseColor;
             e.DiffuseColor = color;
-
+            
             model.Draw(world, TheGame.Camera.View, TheGame.Camera.Projection);
 
+            e.TextureEnabled = false;
             e.DiffuseColor = prev;
 
             base.Draw(gameTime);
