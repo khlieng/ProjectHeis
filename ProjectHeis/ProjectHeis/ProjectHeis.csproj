@@ -117,6 +117,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="SkyDome.cs" />
     <Compile Include="Terrain.cs" />
+    <Compile Include="TextButton.cs" />
     <Compile Include="TheGame.cs" />
   </ItemGroup>
   <ItemGroup>
