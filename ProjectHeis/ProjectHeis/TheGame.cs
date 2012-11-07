@@ -23,11 +23,15 @@ namespace ProjectHeis
         private Model treeModel;
 
         private SpriteFont font;
+        private SpriteFont bigFont;
         public static string info = "TEST";
+        private string floorNumber = "";
 
         private Entity player;
         private Entity floor;
         private Entity[] floors;
+
+        private BoundingBox[] floorNumbers;
 
         private List<Entity> movingEntities = new List<Entity>();
         private List<Entity> staticEntities = new List<Entity>();
@@ -70,6 +74,7 @@ namespace ProjectHeis
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("arial");
+            bigFont = Content.Load<SpriteFont>("big");
 
             box = Content.Load<Model>("box");
             (box.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
@@ -102,11 +107,16 @@ namespace ProjectHeis
             wall4.Scale = new Vector3(0.02f, 4.5f, 0.8f);
 
             floors = new Entity[20];
+            floorNumbers = new BoundingBox[20];
             for (int i = 0; i < floors.Length; i++)
             {
                 floors[i] = new Entity(this, box);
                 floors[i].Position = new Vector3(0, i * 50, 0);
                 floors[i].Scale = new Vector3(0.99f, 0.02f, 0.99f);
+
+                BoundingBox bb = floors[i].BB;
+                bb.Max.Y += 40;
+                floorNumbers[i] = bb;
             }
 
             Entity elevator = new Entity(this, box);
@@ -153,9 +163,16 @@ namespace ProjectHeis
 
         protected override void Update(GameTime gameTime)
         {
-
+            info = "";
             foreach (var m in movingEntities)
             {
+                for (int i = 0; i < floorNumbers.Length; i++)
+                {
+                    if (m.BB.Intersects(floorNumbers[i]))
+                    {
+                        floorNumber = "Du er i " + (i + 1) + ". etasje";
+                    }
+                }
                 foreach (var s in staticEntities)
                 {
                     if (m.BB.Intersects(s.BB))
@@ -206,7 +223,6 @@ namespace ProjectHeis
                 }
             }            
 
-            info = "";
             info += "\nX: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z;
             info += "\npMin: " + player.BB.Min + ", pMax: " + player.BB.Max;
             info += "\nf1Min: " + floor.BB.Min + ", f1Max: " + floor.BB.Max;
@@ -237,6 +253,7 @@ namespace ProjectHeis
 
             spriteBatch.Begin();
             spriteBatch.DrawString(font, info, new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(bigFont, floorNumber, new Vector2(600, 10), Color.White);
             spriteBatch.End();
         }
     }

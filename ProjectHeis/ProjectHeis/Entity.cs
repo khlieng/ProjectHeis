@@ -10,12 +10,31 @@ namespace ProjectHeis
     public class Entity : DrawableGameComponent
     {
         public float Rotation { get; set; }
-        public Vector3 Position { get; set; }
+        private Vector3 position;
+        public Vector3 Position
+        {
+            get
+            {
+                return position;
+            }
+            set
+            {
+                position = value;
+                /*world = Matrix.CreateScale(Scale) * Matrix.CreateRotationY(Rotation) * Matrix.CreateTranslation(value);
+                BB = UpdateBoundingBox(model, Matrix.CreateScale(Scale) * Matrix.CreateTranslation(value));*/
+            }
+        }
         public Vector3 Direction { get; set; }
         public float VelocityY { get; set; }
         public Vector3 Scale { get; set; }
         public bool Gravity { get; set; }
-        public BoundingBox BB { get; private set; }
+        public BoundingBox BB
+        {
+            get
+            {
+                return UpdateBoundingBox(model, Matrix.CreateScale(Scale) * Matrix.CreateTranslation(Position));
+            }
+        }
         public bool Floored { get; set; }
 
         private Matrix world;
@@ -75,7 +94,7 @@ namespace ProjectHeis
         {
             world = Matrix.CreateScale(Scale) * Matrix.CreateRotationY(Rotation) * Matrix.CreateTranslation(Position);
 
-            BB = UpdateBoundingBox(model, Matrix.CreateScale(Scale) * Matrix.CreateTranslation(Position));
+            /*BB = UpdateBoundingBox(model, Matrix.CreateScale(Scale) * Matrix.CreateTranslation(Position));*/
 
             BasicEffect e = (BasicEffect)model.Meshes[0].Effects[0];
             Vector3 prev = e.DiffuseColor;
