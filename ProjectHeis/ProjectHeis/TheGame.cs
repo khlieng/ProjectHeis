@@ -10,6 +10,12 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 //using Microsoft.Xna.Framework.Media.Song;
 
+/**
+ * Musikk og effekter er hentet fra: http://soundfxnow.com/sound-fx/elevator-bell/
+ * 
+ * 
+ * 
+ */
 namespace ProjectHeis
 {
     public class TheGame : Game
@@ -19,6 +25,7 @@ namespace ProjectHeis
       // private SoundEffect ElevatortMusic;
        // private SoundEffect LiftDingDong;
         private Song ElevatortMusic;
+        private Song ElevatorBell;
 
         private GraphicsDeviceManager graphics;
         private GraphicsDevice device;
@@ -110,6 +117,7 @@ namespace ProjectHeis
             effect.Texture = textureBuilding;*/
 
             ElevatortMusic = Content.Load<Song>("Audio\\elevatorMusic");
+            ElevatorBell = Content.Load<Song>("Audio\\ElevatorBell");
 
             
             
@@ -218,6 +226,7 @@ namespace ProjectHeis
         protected override void Update(GameTime gameTime)
         {
            
+            
             KeyboardState keyboard = Keyboard.GetState();
             if (keyboard.IsKeyDown(Keys.E) &&
                 prevKeyboard.IsKeyUp(Keys.E))
@@ -344,11 +353,20 @@ namespace ProjectHeis
                 }
                 if (!onElevator)
                 {
+                    if (MediaPlayer.State != MediaState.Stopped)
+                        MediaPlayer.Stop();
+
                     for (int i = 0; i < 20; i++)
                     {
                         elevatorButtons[i].Enabled = false;
                         elevatorButtons[i].Visible = false;
                     }
+                }
+                else
+                {
+                    if (MediaPlayer.State != MediaState.Playing)
+                        MediaPlayer.Play(ElevatortMusic);
+                    
                 }
             }            
 

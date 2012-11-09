@@ -118,7 +118,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\" />
     <Folder Include="Models\" />
+    <Folder Include="Texture\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building_texture3.jpg">
@@ -130,6 +132,13 @@
   <ItemGroup>
     <Compile Include="Audio\elevatorMusic.mp3">
       <Name>elevatorMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Audio\ElevatorBell.mp3">
+      <Name>ElevatorBell</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
     </Compile>
