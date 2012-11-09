@@ -8,11 +8,18 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+//using Microsoft.Xna.Framework.Media.Song;
 
 namespace ProjectHeis
 {
     public class TheGame : Game
     {
+
+        #region Variables
+      // private SoundEffect ElevatortMusic;
+       // private SoundEffect LiftDingDong;
+        private Song ElevatortMusic;
+
         private GraphicsDeviceManager graphics;
         private GraphicsDevice device;
 
@@ -56,7 +63,8 @@ namespace ProjectHeis
 
         public static Camera Camera { get; private set; }
 
-        private BloomComponent bloom;
+        private BloomComponent bloom; 
+        #endregion
 
         public TheGame()
         {
@@ -104,6 +112,8 @@ namespace ProjectHeis
             textureBuilding = Content.Load<Texture2D>("Building_texture3");
            /*effect.TextureEnabled = true;
             effect.Texture = textureBuilding;*/
+
+            ElevatortMusic = Content.Load<Song>("Audio\\elevatorMusic");
 
             
             
@@ -232,6 +242,7 @@ namespace ProjectHeis
         
         protected override void Update(GameTime gameTime)
         {
+           
             KeyboardState keyboard = Keyboard.GetState();
             if (keyboard.IsKeyDown(Keys.E) &&
                 prevKeyboard.IsKeyUp(Keys.E))
@@ -295,16 +306,21 @@ namespace ProjectHeis
                 {
                     if (m.BB.Intersects(floorNumbers[i]))
                     {
+                       
                         floorNumber = "Du er i " + (i + 1) + ". etasje";
                         currentFloor = i + 1;
                         found = true;
+                       
                     }
                     if (m.BB.Intersects(elevatorFronts[i]))
                     {
                         floorNumber += "\n...og du stAr foran heisen.";
                         inFrontOfElevator = true;
+                        
                     }
                 }
+
+              
                 if (!found)
                 {
                     floorNumber = "";
