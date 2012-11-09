@@ -13,7 +13,7 @@ namespace ProjectHeis
         private Vector3 position;
 
         public Texture2D Texture { get; set; }
-
+        public float Alpha { get; set; }
 
         
 
@@ -71,6 +71,7 @@ namespace ProjectHeis
             Direction = Vector3.Forward;
             Gravity = false;
             Color = Color.DarkGray;
+            Alpha = 1;
             
             Initialize();
 
@@ -100,11 +101,15 @@ namespace ProjectHeis
 
         public override void Draw(GameTime gameTime)
         {
+            BasicEffect b = (BasicEffect)model.Meshes[0].Effects[0];
             if (Texture != null)
             {
-                BasicEffect b = (BasicEffect)model.Meshes[0].Effects[0];
                 b.TextureEnabled = true;
                 b.Texture = Texture;
+            }
+            else
+            {
+                b.Alpha = Alpha;
             }
             world = Matrix.CreateScale(Scale) * Matrix.CreateRotationY(Rotation) * Matrix.CreateTranslation(Position);
 
