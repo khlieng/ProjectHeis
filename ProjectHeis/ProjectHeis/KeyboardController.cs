@@ -23,10 +23,10 @@ namespace ProjectHeis
             KeyboardState keyboard = Keyboard.GetState();
 
             if (prevKeyboard.IsKeyUp(Keys.Space) &&
-                keyboard.IsKeyDown(Keys.Space) //&&
-                /*entity.Floored*/)
+                keyboard.IsKeyDown(Keys.Space) &&
+                entity.Floored)
             {
-                entity.VelocityY = 8;
+                entity.VelocityY = 2.4f;
             }
 
             if (keyboard.IsKeyDown(Keys.W))

@@ -91,7 +91,7 @@ namespace ProjectHeis
 
             if (Gravity)
             {
-                VelocityY -= 20 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                VelocityY -= 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Position += new Vector3(0, VelocityY, 0);
             }
             
