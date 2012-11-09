@@ -14,6 +14,8 @@ namespace ProjectHeis
         private int elapsed;
         private bool done;
 
+        public event EventHandler Done;
+
         public Animation(Game game, Entity entity, Vector3 positionDelta, int duration)
             : base(game)
         {
@@ -32,12 +34,21 @@ namespace ProjectHeis
                 if (elapsed >= duration)
                 {
                     done = true;
+                    OnDone();
                 }
 
                 entity.Position += positionDelta * gameTime.ElapsedGameTime.Milliseconds;
             }
 
             base.Update(gameTime);
+        }
+
+        protected virtual void OnDone()
+        {
+            if (Done != null)
+            {
+                Done(this, EventArgs.Empty);
+            }
         }
     }
 }

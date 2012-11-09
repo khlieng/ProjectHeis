@@ -111,6 +111,7 @@
     <Compile Include="BloomComponent.cs" />
     <Compile Include="BloomSettings.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="ElevatorDoors.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="IController.cs" />
     <Compile Include="KeyboardController.cs" />
