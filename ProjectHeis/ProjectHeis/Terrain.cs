@@ -30,6 +30,8 @@ namespace ProjectHeis
         private int terrainHeight = 3;
         private float[,] heightData;
 
+        private float rot = 0;
+
         Effect effect;
 
         public Terrain(Game game)
