@@ -44,11 +44,12 @@ namespace ProjectHeis
         private SpriteFont bigFont;
         public static string info = "TEST";
         private string floorNumber = "";
+        private string elevatorQueue = "";
 
         private Entity player;
         private Entity floor;
         private Entity[] floors;
-        private Entity[] doors;
+        private ElevatorDoors[] doors;
         private Entity elevator;
 
         private BoundingBox[] floorNumbers;
@@ -120,8 +121,8 @@ namespace ProjectHeis
            /*effect.TextureEnabled = true;
             effect.Texture = textureBuilding;*/
 
-            ElevatortMusic = Content.Load<Song>("Audio\\elevatorMusic");
-            ElevatorBell = Content.Load<Song>("Audio\\ElevatorBell");
+            //ElevatortMusic = Content.Load<Song>("Audio\\elevatorMusic");
+            //ElevatorBell = Content.Load<Song>("Audio\\ElevatorBell");
 
             
             
@@ -154,7 +155,7 @@ namespace ProjectHeis
             wall4.Texture = textureBuilding;
 
             floors = new Entity[20];
-            doors = new Entity[40];
+            doors = new ElevatorDoors[20];
             floorNumbers = new BoundingBox[20];
             elevatorFronts = new BoundingBox[20];
             for (int i = 0; i < floors.Length; i++)
@@ -163,12 +164,7 @@ namespace ProjectHeis
                 floors[i].Position = new Vector3(0, i * 50, 0);
                 floors[i].Scale = new Vector3(0.99f, 0.02f, 0.99f);
 
-                doors[i * 2] = new Entity(this, box);
-                doors[i * 2].Position = new Vector3(-100, i * 50 + 25, -90);
-                doors[i * 2].Scale = new Vector3(0.01f, 0.24f, 0.1f);
-                doors[i * 2 + 1] = new Entity(this, box);
-                doors[i * 2 + 1].Position = new Vector3(-100, i * 50 + 25, -69);
-                doors[i * 2 + 1].Scale = new Vector3(0.01f, 0.24f, 0.1f);
+                doors[i] = new ElevatorDoors(this, i, box);
 
                 BoundingBox bb = floors[i].BB;
                 bb.Min.X -= 45;
@@ -206,8 +202,8 @@ namespace ProjectHeis
             for (int i = 0; i < floors.Length; i++)
             {
                 staticEntities.Add(floors[i]);
-                staticEntities.Add(doors[i * 2]);
-                staticEntities.Add(doors[i * 2 + 1]);
+                //staticEntities.Add(doors[i * 2]);
+                //staticEntities.Add(doors[i * 2 + 1]);
             }
             staticEntities.Add(wall);
             staticEntities.Add(wall2);
@@ -247,6 +243,8 @@ namespace ProjectHeis
         protected override void UnloadContent()
         {
         }
+
+        int cd = 0;
         
         protected override void Update(GameTime gameTime)
         {
@@ -268,8 +266,31 @@ namespace ProjectHeis
             }
             prevKeyboard = keyboard;
 
+            elevatorQueue = "Target: " + elevatorTargetFloor + "\nHeisQ:\n";
+            foreach (var f in elevatorTargetFloors)
+                elevatorQueue += f + "\n";
+
             if (!hasTarget && elevatorTargetFloors.Count > 0)
             {
+                /*CloseDoors(currentFloor);
+                RequestElevator(elevatorTargetFloors.Dequeue());
+                hasTarget = true;*/
+                
+            }
+
+            if (cd > 0)
+            {
+                cd -= gameTime.ElapsedGameTime.Milliseconds;
+                if (cd <= 0 && !hasTarget && elevatorTargetFloors.Count > 0)
+                {
+                    CloseDoors(currentFloor);
+                    RequestElevator(elevatorTargetFloors.Dequeue());
+                    hasTarget = true;
+                }
+            }
+            else if(!hasTarget && elevatorTargetFloors.Count > 0)
+            {
+                CloseDoors(currentFloor);
                 RequestElevator(elevatorTargetFloors.Dequeue());
                 hasTarget = true;
             }
@@ -303,6 +324,7 @@ namespace ProjectHeis
                 {
                     OpenDoors(elevatorTargetFloor);
                     hasTarget = false;
+                    cd = 3000;
                 }
             }
             
@@ -395,8 +417,8 @@ namespace ProjectHeis
                 }
                 if (!onElevator)
                 {
-                    if (MediaPlayer.State != MediaState.Stopped)
-                        MediaPlayer.Stop();
+                    //if (MediaPlayer.State != MediaState.Stopped)
+                        //MediaPlayer.Stop();
 
                     for (int i = 0; i < 20; i++)
                     {
@@ -406,8 +428,8 @@ namespace ProjectHeis
                 }
                 else
                 {
-                    if (MediaPlayer.State != MediaState.Playing)
-                        MediaPlayer.Play(ElevatortMusic);
+                    //if (MediaPlayer.State != MediaState.Playing)
+                        //MediaPlayer.Play(ElevatortMusic);
                     
                 }
             }            
@@ -443,6 +465,7 @@ namespace ProjectHeis
             spriteBatch.Begin();
             spriteBatch.DrawString(font, info, new Vector2(10, 10), Color.White);
             spriteBatch.DrawString(bigFont, floorNumber, new Vector2(600, 10), Color.White);
+            spriteBatch.DrawString(font, elevatorQueue, new Vector2(1100, 10), Color.White);
             spriteBatch.End();
         }
         
@@ -462,20 +485,22 @@ namespace ProjectHeis
         
         private void OpenDoors(int floor)
         {
-            Entity d1 = doors[(floor - 1) * 2];
-            Entity d2 = doors[(floor - 1) * 2 + 1];
+            doors[floor - 1].Open();
+            //Entity d1 = doors[(floor - 1) * 2];
+            //Entity d2 = doors[(floor - 1) * 2 + 1];
 
-            new Animation(this, d1, new Vector3(0, 0, -15), 2000);
-            new Animation(this, d2, new Vector3(0, 0, 15), 2000);
+            //new Animation(this, d1, new Vector3(0, 0, -15), 2000);
+            //new Animation(this, d2, new Vector3(0, 0, 15), 2000);
         }
 
         private void CloseDoors(int floor)
         {
-            Entity d1 = doors[(floor - 1) * 2];
-            Entity d2 = doors[(floor - 1) * 2 + 1];
+            doors[floor - 1].Close();
+            //Entity d1 = doors[(floor - 1) * 2];
+            //Entity d2 = doors[(floor - 1) * 2 + 1];
 
-            new Animation(this, d1, new Vector3(0, 0, 15), 2000);
-            new Animation(this, d2, new Vector3(0, 0, -15), 2000);
+            //new Animation(this, d1, new Vector3(0, 0, 15), 2000);
+            //new Animation(this, d2, new Vector3(0, 0, -15), 2000);
         }
     }
 }
