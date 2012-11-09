@@ -19,6 +19,8 @@ namespace ProjectHeis
         private BasicEffect effect;
         private SpriteBatch spriteBatch;
 
+        private KeyboardState prevKeyboard;
+
         private Model box;
         private Model treeModel;
 
@@ -32,8 +34,18 @@ namespace ProjectHeis
         private Entity player;
         private Entity floor;
         private Entity[] floors;
+        private Entity elevator;
 
         private BoundingBox[] floorNumbers;
+        private BoundingBox[] elevatorFronts;
+        private int currentFloor;
+        private bool inFrontOfElevator;
+        private bool onElevator;
+        private TextButton[] elevatorButtons;
+
+        private int elevatorDirection;
+        private float elevatorSpeed = 50.0f;
+        private int elevatorTargetY;
 
         private List<Entity> movingEntities = new List<Entity>();
         private List<Entity> staticEntities = new List<Entity>();
@@ -46,6 +58,7 @@ namespace ProjectHeis
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
         }
 
         protected override void Initialize()
@@ -57,11 +70,11 @@ namespace ProjectHeis
         private void InitDevice()
         {
             device = graphics.GraphicsDevice;
-
+            
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
             graphics.IsFullScreen = false;
-            graphics.PreferMultiSampling = true;
+            graphics.PreferMultiSampling = true;            
             graphics.ApplyChanges();
 
             effect = new BasicEffect(GraphicsDevice);
@@ -75,6 +88,7 @@ namespace ProjectHeis
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Services.AddService(typeof(SpriteBatch), spriteBatch);
             font = Content.Load<SpriteFont>("arial");
             bigFont = Content.Load<SpriteFont>("big");
 
@@ -98,7 +112,7 @@ namespace ProjectHeis
 
             floor = new Entity(this, box);
             floor.Scale = new Vector3(0.99f, 0.5f, 0.99f);
-            floor.Position = new Vector3(0, -40, 0);
+            floor.Position = new Vector3(0, -50, 0);
 
             Entity wall = new Entity(this, box);
             wall.Position = new Vector3(100, 450, 0);
@@ -119,6 +133,7 @@ namespace ProjectHeis
 
             floors = new Entity[20];
             floorNumbers = new BoundingBox[20];
+            elevatorFronts = new BoundingBox[20];
             for (int i = 0; i < floors.Length; i++)
             {
                 floors[i] = new Entity(this, box);
@@ -128,12 +143,16 @@ namespace ProjectHeis
                 BoundingBox bb = floors[i].BB;
                 bb.Max.Y += 40;
                 floorNumbers[i] = bb;
+
+                bb.Max.X -= 175;
+                bb.Max.Z -= 150;
+                elevatorFronts[i] = bb;
             }
 
-            Entity elevator = new Entity(this, box);
+            elevator = new Entity(this, box);
             elevator.Color = Color.LimeGreen;
             elevator.Scale = new Vector3(0.2f, 0.02f, 0.2f);
-            elevator.Position = new Vector3(-120, 8, -78);
+            elevator.Position = new Vector3(-120, 0, -78);
             
             Entity tree = new Entity(this, treeModel);
             tree.Scale = new Vector3(0.15f);
@@ -149,6 +168,7 @@ namespace ProjectHeis
             terrain.Initialize();
             SkyDome skyDome = new SkyDome(this);
             skyDome.Initialize();
+
 
             staticEntities.Add(floor);
             for (int i = 0; i < floors.Length; i++)
@@ -167,28 +187,101 @@ namespace ProjectHeis
 
             Components.Add(terrain);
             Components.Add(skyDome);
+
+            elevatorButtons = new TextButton[20];
+            for (int i = 0; i < elevatorButtons.Length; i++)
+            {
+                elevatorButtons[i] = new TextButton(this, new Vector2(50 + i * 60, 650), (i+1)+"", bigFont);
+                elevatorButtons[i].Click += (o, e) =>
+                {
+                    RequestElevator(int.Parse((o as TextButton).Text));
+                };
+                elevatorButtons[i].Visible = false;
+                elevatorButtons[i].Enabled = false;
+            }
         }
 
         protected override void UnloadContent()
         {
         }
-
+        
         protected override void Update(GameTime gameTime)
         {
+            KeyboardState keyboard = Keyboard.GetState();
+            if (keyboard.IsKeyDown(Keys.E) &&
+                prevKeyboard.IsKeyUp(Keys.E))
+            {
+                if (inFrontOfElevator)
+                {
+                    RequestElevator(currentFloor);
+                }
+            }
+            prevKeyboard = keyboard;
+
+            if (elevator.Position.Y != elevatorTargetY)
+            {
+                if (elevatorDirection == 1)
+                {
+                    if (elevator.Position.Y + elevatorSpeed * elevatorDirection * (float)gameTime.ElapsedGameTime.TotalSeconds > elevatorTargetY)
+                    {
+                        elevator.Position = new Vector3(elevator.Position.X, elevatorTargetY, elevator.Position.Z);
+                    }
+                    else
+                    {
+                        elevator.Position += new Vector3(0, elevatorSpeed * elevatorDirection * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                    }
+                }
+                else
+                {
+                    if (elevator.Position.Y + elevatorSpeed * elevatorDirection * (float)gameTime.ElapsedGameTime.TotalSeconds < elevatorTargetY)
+                    {
+                        elevator.Position = new Vector3(elevator.Position.X, elevatorTargetY, elevator.Position.Z);
+                    }
+                    else
+                    {
+                        elevator.Position += new Vector3(0, elevatorSpeed * elevatorDirection * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                    }
+                }
+            }
+            
             info = "";
             foreach (var m in movingEntities)
             {
+                bool found = false;
+                inFrontOfElevator = false;
                 for (int i = 0; i < floorNumbers.Length; i++)
                 {
                     if (m.BB.Intersects(floorNumbers[i]))
                     {
                         floorNumber = "Du er i " + (i + 1) + ". etasje";
+                        currentFloor = i + 1;
+                        found = true;
+                    }
+                    if (m.BB.Intersects(elevatorFronts[i]))
+                    {
+                        floorNumber += "\n...og du stAr foran heisen.";
+                        inFrontOfElevator = true;
                     }
                 }
+                if (!found)
+                {
+                    floorNumber = "";
+                }
+                onElevator = false;
                 foreach (var s in staticEntities)
                 {
                     if (m.BB.Intersects(s.BB))
                     {
+                        if (s == elevator)
+                        {
+                            onElevator = true;
+                            for (int i = 0; i < 20; i++)
+                            {
+                                elevatorButtons[i].Enabled = true;
+                                elevatorButtons[i].Visible = true;
+                            }
+                        }
+
                         Vector3 halfWidthMoving = (m.BB.Max - m.BB.Min) * 0.5f;
                         Vector3 halfWidthStatic = (s.BB.Max - s.BB.Min) * 0.5f;
 
@@ -233,6 +326,14 @@ namespace ProjectHeis
                     if (m.VelocityY != 0)
                         m.Floored = false;
                 }
+                if (!onElevator)
+                {
+                    for (int i = 0; i < 20; i++)
+                    {
+                        elevatorButtons[i].Enabled = false;
+                        elevatorButtons[i].Visible = false;
+                    }
+                }
             }            
 
             info += "\nX: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z;
@@ -267,6 +368,19 @@ namespace ProjectHeis
             spriteBatch.DrawString(font, info, new Vector2(10, 10), Color.White);
             spriteBatch.DrawString(bigFont, floorNumber, new Vector2(600, 10), Color.White);
             spriteBatch.End();
+        }
+        
+        private void RequestElevator(int floor)
+        {
+            elevatorTargetY = (floor - 1) * 50;
+            if (elevator.Position.Y < elevatorTargetY)
+            {
+                elevatorDirection = 1;
+            }
+            else
+            {
+                elevatorDirection = -1;
+            }
         }
     }
 }

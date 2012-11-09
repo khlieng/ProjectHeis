@@ -26,7 +26,7 @@ namespace ProjectHeis
                 keyboard.IsKeyDown(Keys.Space) //&&
                 /*entity.Floored*/)
             {
-                entity.VelocityY = 2;
+                entity.VelocityY = 8;
             }
 
             if (keyboard.IsKeyDown(Keys.W))
