@@ -19,8 +19,7 @@ namespace ProjectHeis
         private float distance = 50.0f;
         private float height = 8.0f;
 
-        public Camera(Game game, Entity entity)
-            : base(game)
+        public Camera(Game game, Entity entity): base(game)
         {
             this.entity = entity;
 

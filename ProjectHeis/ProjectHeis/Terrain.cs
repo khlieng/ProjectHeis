@@ -57,8 +57,9 @@ namespace ProjectHeis
         public override void Draw(GameTime gameTime)
         {
             Matrix worldMatrix = Matrix.CreateScale(12.0f) * Matrix.CreateTranslation(-1500, -30, 2500) * Matrix.CreateTranslation(5.0f, -5.0f, 0.0f);
-            effect.CurrentTechnique = effect.Techniques["Colored"];
 
+
+            effect.CurrentTechnique = effect.Techniques["Colored"];
             effect.Parameters["xView"].SetValue(TheGame.Camera.View);
             effect.Parameters["xProjection"].SetValue(TheGame.Camera.Projection);
             effect.Parameters["xWorld"].SetValue(worldMatrix);

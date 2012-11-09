@@ -5,6 +5,14 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+/**
+ * SkyDome er basert på http://www.riemers.net/eng/Tutorials/XNA/Csharp/Series4/Skydome.php
+ * Koden er skrevet om slik at den kan brukes i XNA 4.0
+ * Texture2D er et random bilde hentet fra www.google.no
+ * dome.x er selve domen med kordinater, det er den Riemers har laget.
+ * 
+ * 
+ */
 namespace ProjectHeis
 {
     class SkyDome : DrawableGameComponent

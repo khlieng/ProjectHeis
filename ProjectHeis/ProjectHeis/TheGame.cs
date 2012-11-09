@@ -24,6 +24,8 @@ namespace ProjectHeis
         private Model box;
         private Model treeModel;
 
+        private Texture2D textureBuilding;
+
         private SpriteFont font;
         private SpriteFont bigFont;
         public static string info = "TEST";
@@ -94,6 +96,11 @@ namespace ProjectHeis
             (box.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
             treeModel = Content.Load<Model>("tree");
             (treeModel.Meshes[0].MeshParts[0].Effect as BasicEffect).EnableDefaultLighting();
+
+            textureBuilding = Content.Load<Texture2D>("Building_texture3");
+           /*effect.TextureEnabled = true;
+            effect.Texture = textureBuilding;*/
+
             
             
             player = new Entity(this, box);
@@ -110,15 +117,19 @@ namespace ProjectHeis
             Entity wall = new Entity(this, box);
             wall.Position = new Vector3(100, 450, 0);
             wall.Scale = new Vector3(0.02f, 5, 1);
+            wall.Texture = textureBuilding;
             Entity wall2 = new Entity(this, box);
             wall2.Position = new Vector3(0, 450, 100);
             wall2.Scale = new Vector3(1, 5, 0.02f);
+            wall2.Texture = textureBuilding;
             Entity wall3 = new Entity(this, box);
             wall3.Position = new Vector3(0, 450, -100);
             wall3.Scale = new Vector3(1, 5, 0.02f);
+            wall3.Texture = textureBuilding;
             Entity wall4 = new Entity(this, box);
             wall4.Position = new Vector3(-100, 500, 20);
             wall4.Scale = new Vector3(0.02f, 4.5f, 0.8f);
+            wall4.Texture = textureBuilding;
 
             floors = new Entity[20];
             floorNumbers = new BoundingBox[20];
@@ -170,6 +181,7 @@ namespace ProjectHeis
             staticEntities.Add(wall4);
             staticEntities.Add(elevator);
             movingEntities.Add(player);
+            
 
             Camera = new Camera(this, player);
 
