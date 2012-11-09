@@ -301,6 +301,7 @@ namespace ProjectHeis
 
                 if (elevator.Position.Y == elevatorTargetY)
                 {
+
                     OpenDoors(elevatorTargetFloor);
                     hasTarget = false;
                 }
@@ -462,6 +463,9 @@ namespace ProjectHeis
         
         private void OpenDoors(int floor)
         {
+          //  MediaPlayer.State != MediaState.Playing;
+                MediaPlayer.Play(ElevatorBell);
+
             Entity d1 = doors[(floor - 1) * 2];
             Entity d2 = doors[(floor - 1) * 2 + 1];
 
