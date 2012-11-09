@@ -34,6 +34,7 @@ namespace ProjectHeis
         private Entity player;
         private Entity floor;
         private Entity[] floors;
+        private Entity[] doors;
         private Entity elevator;
 
         private BoundingBox[] floorNumbers;
@@ -46,6 +47,9 @@ namespace ProjectHeis
         private int elevatorDirection;
         private float elevatorSpeed = 50.0f;
         private int elevatorTargetY;
+        private int elevatorTargetFloor;
+        private Queue<int> elevatorTargetFloors = new Queue<int>();
+        private bool hasTarget;
 
         private List<Entity> movingEntities = new List<Entity>();
         private List<Entity> staticEntities = new List<Entity>();
@@ -132,6 +136,7 @@ namespace ProjectHeis
             wall4.Texture = textureBuilding;
 
             floors = new Entity[20];
+            doors = new Entity[40];
             floorNumbers = new BoundingBox[20];
             elevatorFronts = new BoundingBox[20];
             for (int i = 0; i < floors.Length; i++)
@@ -140,10 +145,19 @@ namespace ProjectHeis
                 floors[i].Position = new Vector3(0, i * 50, 0);
                 floors[i].Scale = new Vector3(0.99f, 0.02f, 0.99f);
 
+                doors[i * 2] = new Entity(this, box);
+                doors[i * 2].Position = new Vector3(-100, i * 50 + 25, -90);
+                doors[i * 2].Scale = new Vector3(0.01f, 0.24f, 0.1f);
+                doors[i * 2 + 1] = new Entity(this, box);
+                doors[i * 2 + 1].Position = new Vector3(-100, i * 50 + 25, -69);
+                doors[i * 2 + 1].Scale = new Vector3(0.01f, 0.24f, 0.1f);
+
                 BoundingBox bb = floors[i].BB;
+                bb.Min.X -= 45;
                 bb.Max.Y += 40;
                 floorNumbers[i] = bb;
 
+                bb.Min.X += 45;
                 bb.Max.X -= 175;
                 bb.Max.Z -= 150;
                 elevatorFronts[i] = bb;
@@ -174,6 +188,8 @@ namespace ProjectHeis
             for (int i = 0; i < floors.Length; i++)
             {
                 staticEntities.Add(floors[i]);
+                staticEntities.Add(doors[i * 2]);
+                staticEntities.Add(doors[i * 2 + 1]);
             }
             staticEntities.Add(wall);
             staticEntities.Add(wall2);
@@ -194,7 +210,16 @@ namespace ProjectHeis
                 elevatorButtons[i] = new TextButton(this, new Vector2(50 + i * 60, 650), (i+1)+"", bigFont);
                 elevatorButtons[i].Click += (o, e) =>
                 {
-                    RequestElevator(int.Parse((o as TextButton).Text));
+                    int targetFloor = int.Parse((o as TextButton).Text);
+                    /*RequestElevator(targetFloor);
+                    if (targetFloor != currentFloor)
+                    {
+                        CloseDoors(currentFloor);
+                    }*/
+                    if (targetFloor != currentFloor)
+                    {
+                        elevatorTargetFloors.Enqueue(targetFloor);
+                    }
                 };
                 elevatorButtons[i].Visible = false;
                 elevatorButtons[i].Enabled = false;
@@ -213,10 +238,21 @@ namespace ProjectHeis
             {
                 if (inFrontOfElevator)
                 {
-                    RequestElevator(currentFloor);
+                    //RequestElevator(currentFloor);
+                    
+                    if (elevatorTargetFloors.Count < 1 || elevatorTargetFloors.Peek() != currentFloor)
+                    {
+                        elevatorTargetFloors.Enqueue(currentFloor);
+                    }
                 }
             }
             prevKeyboard = keyboard;
+
+            if (!hasTarget && elevatorTargetFloors.Count > 0)
+            {
+                RequestElevator(elevatorTargetFloors.Dequeue());
+                hasTarget = true;
+            }
 
             if (elevator.Position.Y != elevatorTargetY)
             {
@@ -241,6 +277,12 @@ namespace ProjectHeis
                     {
                         elevator.Position += new Vector3(0, elevatorSpeed * elevatorDirection * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
                     }
+                }
+
+                if (elevator.Position.Y == elevatorTargetY)
+                {
+                    OpenDoors(elevatorTargetFloor);
+                    hasTarget = false;
                 }
             }
             
@@ -372,6 +414,7 @@ namespace ProjectHeis
         
         private void RequestElevator(int floor)
         {
+            elevatorTargetFloor = floor;
             elevatorTargetY = (floor - 1) * 50;
             if (elevator.Position.Y < elevatorTargetY)
             {
@@ -381,6 +424,24 @@ namespace ProjectHeis
             {
                 elevatorDirection = -1;
             }
+        }
+        
+        private void OpenDoors(int floor)
+        {
+            Entity d1 = doors[(floor - 1) * 2];
+            Entity d2 = doors[(floor - 1) * 2 + 1];
+
+            new Animation(this, d1, new Vector3(0, 0, -15), 2000);
+            new Animation(this, d2, new Vector3(0, 0, 15), 2000);
+        }
+
+        private void CloseDoors(int floor)
+        {
+            Entity d1 = doors[(floor - 1) * 2];
+            Entity d2 = doors[(floor - 1) * 2 + 1];
+
+            new Animation(this, d1, new Vector3(0, 0, 15), 2000);
+            new Animation(this, d2, new Vector3(0, 0, -15), 2000);
         }
     }
 }
