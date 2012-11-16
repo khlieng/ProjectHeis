@@ -25,6 +25,7 @@ namespace ProjectHeis
             RightDoor = new Entity(game, m);
             RightDoor.Position = new Vector3(-100, floor * 50 + 25, -69);
             RightDoor.Scale = new Vector3(0.01f, 0.24f, 0.1f);
+
         }
 
         public void Open()
