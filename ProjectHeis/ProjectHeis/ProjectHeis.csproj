@@ -121,6 +121,7 @@
     <Compile Include="Terrain.cs" />
     <Compile Include="TextButton.cs" />
     <Compile Include="TheGame.cs" />
+    <Compile Include="WaterEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

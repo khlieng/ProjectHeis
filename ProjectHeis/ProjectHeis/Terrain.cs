@@ -5,6 +5,13 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+
+/**
+ * Terrain er basert på Tutorial fra riemers.net
+ * brukt en del fra oblig6
+ * 
+ * 
+ */ 
 namespace ProjectHeis
 {
     public class Terrain : DrawableGameComponent
@@ -34,9 +41,9 @@ namespace ProjectHeis
 
         Effect effect;
 
-        public Terrain(Game game)
-            : base(game)
+        public Terrain(Game game) : base(game)
         {
+
         }
 
         public override void Initialize()
