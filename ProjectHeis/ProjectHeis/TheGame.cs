@@ -121,8 +121,8 @@ namespace ProjectHeis
            /*effect.TextureEnabled = true;
             effect.Texture = textureBuilding;*/
 
-            //ElevatortMusic = Content.Load<Song>("Audio\\elevatorMusic");
-            //ElevatorBell = Content.Load<Song>("Audio\\ElevatorBell");
+          //  ElevatortMusic = Content.Load<Song>("Audio\\elevatorMusic");
+           // ElevatorBell = Content.Load<Song>("Audio\\ElevatorBell");
 
             
             
@@ -417,8 +417,8 @@ namespace ProjectHeis
                 }
                 if (!onElevator)
                 {
-                    //if (MediaPlayer.State != MediaState.Stopped)
-                        //MediaPlayer.Stop();
+                   // if (MediaPlayer.State != MediaState.Stopped)
+                       // MediaPlayer.Stop();
 
                     for (int i = 0; i < 20; i++)
                     {
@@ -429,7 +429,7 @@ namespace ProjectHeis
                 else
                 {
                     //if (MediaPlayer.State != MediaState.Playing)
-                        //MediaPlayer.Play(ElevatortMusic);
+                       // MediaPlayer.Play(ElevatortMusic);
                     
                 }
             }            
@@ -485,6 +485,7 @@ namespace ProjectHeis
         
         private void OpenDoors(int floor)
         {
+           // MediaPlayer.Play(ElevatorBell);
             doors[floor - 1].Open();
             //Entity d1 = doors[(floor - 1) * 2];
             //Entity d2 = doors[(floor - 1) * 2 + 1];
