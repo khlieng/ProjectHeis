@@ -109,34 +109,38 @@ namespace ProjectHeis
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch);
-            font = Content.Load<SpriteFont>("arial");
-            bigFont = Content.Load<SpriteFont>("big");
+            font = Content.Load<SpriteFont>("Sprites/arial");
+            bigFont = Content.Load<SpriteFont>("Sprites/big");
 
-            box = Content.Load<Model>("box");
+            box = Content.Load<Model>("Models/box");
             (box.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
-            treeModel = Content.Load<Model>("tree");
+            treeModel = Content.Load<Model>("Models/tree");
             (treeModel.Meshes[0].MeshParts[0].Effect as BasicEffect).EnableDefaultLighting();
 
-            textureBuilding = Content.Load<Texture2D>("Building_texture3");
+            textureBuilding = Content.Load<Texture2D>("Texture/Building_texture3");
            /*effect.TextureEnabled = true;
             effect.Texture = textureBuilding;*/
 
           //  ElevatortMusic = Content.Load<Song>("Audio\\elevatorMusic");
            // ElevatorBell = Content.Load<Song>("Audio\\ElevatorBell");
 
-            
-            
+
+            #region Player
             player = new Entity(this, box);
             player.Position = new Vector3(0, 100, 0);
             player.Controller = new KeyboardController(player);
             player.Scale = new Vector3(0.01f, 0.02f, 0.01f);
             player.Gravity = true;
             player.Color = Color.Purple;
+            #endregion
 
+            #region floor
             floor = new Entity(this, box);
             floor.Scale = new Vector3(0.99f, 0.5f, 0.99f);
             floor.Position = new Vector3(0, -50, 0);
+            #endregion
 
+            #region walls
             Entity wall = new Entity(this, box);
             wall.Position = new Vector3(100, 450, 0);
             wall.Scale = new Vector3(0.02f, 5, 1);
@@ -153,7 +157,7 @@ namespace ProjectHeis
             wall4.Position = new Vector3(-100, 500, 20);
             wall4.Scale = new Vector3(0.02f, 4.5f, 0.8f);
             wall4.Texture = textureBuilding;
-            
+            #endregion
 
             floors = new Entity[20];
             doors = new ElevatorDoors[20];
@@ -178,11 +182,14 @@ namespace ProjectHeis
                 elevatorFronts[i] = bb;
             }
 
+            #region elevator
             elevator = new Entity(this, box);
             elevator.Color = Color.LimeGreen;
             elevator.Scale = new Vector3(0.2f, 0.02f, 0.2f);
             elevator.Position = new Vector3(-120, 0, -80);
-            
+            #endregion
+
+            #region Tree model
             Entity tree = new Entity(this, treeModel);
             tree.Scale = new Vector3(0.15f);
             tree.Position = new Vector3(50, 10, 50);
@@ -192,13 +199,16 @@ namespace ProjectHeis
             Entity tree3 = new Entity(this, treeModel);
             tree3.Scale = new Vector3(0.2f);
             tree3.Position = new Vector3(40, 5, 10);
+            #endregion
 
+            #region Skydome and Terrain
             Terrain terrain = new Terrain(this);
             terrain.Initialize();
             SkyDome skyDome = new SkyDome(this);
             skyDome.Initialize();
+            #endregion
 
-            
+            #region AddDoors
             staticEntities.Add(floor);
             for (int i = 0; i < floors.Length; i++)
             {
@@ -208,18 +218,21 @@ namespace ProjectHeis
                 //staticEntities.Add(doors[i * 2]);
                 //staticEntities.Add(doors[i * 2 + 1]);
             }
+            #endregion
+
+            #region add component
             staticEntities.Add(wall);
             staticEntities.Add(wall2);
             staticEntities.Add(wall3);
             staticEntities.Add(wall4);
             staticEntities.Add(elevator);
             movingEntities.Add(player);
-            
-
 
             Components.Add(terrain);
             Components.Add(skyDome);
-            
+            #endregion
+
+            #region elevatorButtons
             elevatorButtons = new TextButton[20];
             for (int i = 0; i < elevatorButtons.Length; i++)
             {
@@ -233,7 +246,9 @@ namespace ProjectHeis
                 elevatorButtons[i].Enabled = false;
                 elevatorButtons[i].DrawOrder = 10;
             }
+            #endregion
 
+            #region ShaftWall(elevator shaft)
             Entity shaftWall1 = new Entity(this, box);
             shaftWall1.Position = new Vector3(-121, 450, -100);
             shaftWall1.Scale = new Vector3(0.21f, 5, 0.02f);
@@ -244,7 +259,7 @@ namespace ProjectHeis
             //shaftWall2.Texture = Content.Load<Texture2D>("trans");
             shaftWall1.Alpha = 0.5f;
             shaftWall2.Alpha = 0.5f;
-
+            #endregion
             staticEntities.Add(shaftWall1);
             staticEntities.Add(shaftWall2);
 
@@ -469,7 +484,9 @@ namespace ProjectHeis
             spriteBatch.DrawString(font, elevatorQueue, new Vector2(1100, 10), Color.White);
             spriteBatch.End();
         }
-        
+
+
+        #region MethodsToElevator
         private void SetElevatorTargetFloor(int floor)
         {
             elevatorTargetFloor = floor;
@@ -517,5 +534,6 @@ namespace ProjectHeis
         {
             doors[floor - 1].Close();
         }
+        #endregion
     }
 }

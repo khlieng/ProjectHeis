@@ -4,20 +4,29 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
+/*Kamera klasse
+ * Denne brukes for og sette kameraposisjoner.
+ * 
+ * 
+ * 
+ */
 namespace ProjectHeis
 {
     public class Camera : GameComponent
     {
+
+        #region Variabler
         private Entity entity;
         private Vector3 position;
         private Vector3 target;
         private Vector3 up = Vector3.Up;
-        
+
         public Matrix View { get; set; }
         public Matrix Projection { get; set; }
 
         private float distance = 50.0f;
-        private float height = 8.0f;
+        private float height = 8.0f; 
+        #endregion
 
         public Camera(Game game, Entity entity): base(game)
         {

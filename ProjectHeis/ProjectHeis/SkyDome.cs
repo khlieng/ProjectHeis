@@ -33,9 +33,9 @@ namespace ProjectHeis
 
         protected override void LoadContent()
         {
-            effect = Game.Content.Load<Effect>("effects");
-            skyDome = Game.Content.Load<Model>("dome"); skyDome.Meshes[0].MeshParts[0].Effect = effect.Clone();
-            cloudMap = Game.Content.Load<Texture2D>("dome1");
+            effect = Game.Content.Load<Effect>("Effect/effects");
+            skyDome = Game.Content.Load<Model>("Models/dome"); skyDome.Meshes[0].MeshParts[0].Effect = effect.Clone();
+            cloudMap = Game.Content.Load<Texture2D>("Images/dome1");
             base.LoadContent();
         }
 

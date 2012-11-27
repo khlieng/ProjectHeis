@@ -42,52 +42,47 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="box.FBX">
+    <Compile Include="Models\box.FBX">
       <Name>box</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arial.spritefont">
+    <Compile Include="Sprites\Arial.spritefont">
       <Name>Arial</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="tree.FBX">
+    <Compile Include="Models\tree.FBX">
       <Name>tree</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="cloudMap.jpg">
-      <Name>cloudMap</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="terrain3.bmp">
+    <Compile Include="Images\terrain3.bmp">
       <Name>terrain3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="dome.x">
+    <Compile Include="Models\dome.x">
       <Name>dome</Name>
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="effects.fx">
+    <Compile Include="Effect\effects.fx">
       <Name>effects</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="dome1.png">
+    <Compile Include="Images\dome1.png">
       <Name>dome1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -111,20 +106,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="big.spritefont">
+    <Compile Include="Sprites\big.spritefont">
       <Name>big</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Effect\" />
-    <Folder Include="Images\" />
-    <Folder Include="Models\" />
-    <Folder Include="Texture\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Building_texture3.jpg">
+    <Compile Include="Texture\Building_texture3.jpg">
       <Name>Building_texture3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

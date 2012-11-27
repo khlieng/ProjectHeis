@@ -36,6 +36,7 @@ namespace ProjectHeis
         public float VelocityY { get; set; }
         public Vector3 Scale { get; set; }
         public bool Gravity { get; set; }
+
         public BoundingBox BB
         {
             get

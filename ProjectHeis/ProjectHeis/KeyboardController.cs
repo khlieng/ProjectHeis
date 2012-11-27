@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-
+/**
+ * Klasse for og bruke keyBordController.
+ * Bruker W;A;D til og bevege "personen"
+ */
 namespace ProjectHeis
 {
     public class KeyboardController : IController
