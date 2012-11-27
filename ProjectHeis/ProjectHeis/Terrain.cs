@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 /**
  * Terrain er basert på Tutorial fra riemers.net
- * brukt en del fra oblig6
+ * Vi har også brukt en del fra oblig 6.
  * 
  * 
  */ 
@@ -29,7 +29,8 @@ namespace ProjectHeis
                 new VertexElement(sizeof(float) * 3 + 4, VertexElementFormat.Vector3, VertexElementUsage.Normal, 0)
             );
         }
-        
+
+        #region Variabler
         VertexPositionColorNormal[] vertices;
         int[] indices;
 
@@ -40,7 +41,9 @@ namespace ProjectHeis
         private float rot = 0;
 
         Effect effect;
+        #endregion
 
+        //kobstruktør
         public Terrain(Game game) : base(game)
         {
 
@@ -53,8 +56,8 @@ namespace ProjectHeis
 
         protected override void LoadContent()
         {
-            effect = Game.Content.Load<Effect>("effects");
-            Texture2D heightMap = Game.Content.Load<Texture2D>("terrain3");
+            effect = Game.Content.Load<Effect>("Effect/effects");
+            Texture2D heightMap = Game.Content.Load<Texture2D>("Images/terrain3");
             LoadHeightData(heightMap);
             SetUpVertices();
             SetUpIndices();

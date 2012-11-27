@@ -5,6 +5,11 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+/**
+ * Klassen brukes til Heisdørene.
+ * Metoder for åpne og ikke åpne.
+ * 
+ */ 
 namespace ProjectHeis
 {
     public class ElevatorDoors
