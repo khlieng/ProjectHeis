@@ -40,7 +40,7 @@ namespace ProjectHeis
             float aspectRatio = (float)Game.GraphicsDevice.Viewport.Width / (float)Game.GraphicsDevice.Viewport.Height;
             Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio, 0.01f, 20000.0f);
 
-            Game.Components.Add(this);
+            //Game.Components.Add(this);
         }
 
         public override void Update(GameTime gameTime)

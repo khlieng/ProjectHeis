@@ -260,7 +260,11 @@ namespace ProjectHeis
             shaftWall1.Alpha = 0.5f;
             shaftWall2.Alpha = 0.5f;
             #endregion
+            staticEntities.Add(shaftWall1);
+            staticEntities.Add(shaftWall2);
+
             Camera = new Camera(this, player);
+            Camera.Initialize();
         }
 
         protected override void UnloadContent()
@@ -336,6 +340,10 @@ namespace ProjectHeis
                 }
             }
             
+            
+
+            base.Update(gameTime);
+
             info = "";
             foreach (var m in movingEntities)
             {
@@ -345,21 +353,21 @@ namespace ProjectHeis
                 {
                     if (m.BB.Intersects(floorNumbers[i]))
                     {
-                       
+
                         floorNumber = "Du er i " + (i + 1) + ". etasje";
                         currentFloor = i + 1;
                         found = true;
-                       
+
                     }
                     if (m.BB.Intersects(elevatorFronts[i]))
                     {
                         floorNumber += "\n...og du stAr foran heisen.";
                         inFrontOfElevator = true;
-                        
+
                     }
                 }
 
-              
+
                 if (!found)
                 {
                     floorNumber = "";
@@ -387,25 +395,25 @@ namespace ProjectHeis
 
                         Vector3 distance = centerMoving - centerStatic;
 
-                        float[] overlap = { distance.X - (halfWidthMoving.X + halfWidthStatic.X),
-                                            distance.Y - (halfWidthMoving.Y + halfWidthStatic.Y),
-                                            distance.Z - (halfWidthMoving.Z + halfWidthStatic.Z) };
+                        float[] overlap = { (halfWidthMoving.X + halfWidthStatic.X) - Math.Abs(distance.X),
+                                            (halfWidthMoving.Y + halfWidthStatic.Y) - Math.Abs(distance.Y),
+                                            (halfWidthMoving.Z + halfWidthStatic.Z) - Math.Abs(distance.Z) };
 
-                        int max = Array.IndexOf(overlap, overlap.Max());
+                        int min = Array.IndexOf(overlap, overlap.Min(o => Math.Abs(o)));
                         Vector3 projection;
 
-                        switch (max)
+                        switch (min)
                         {
                             case 0:
-                                projection = new Vector3(-overlap[max], 0, 0);
+                                projection = new Vector3(distance.X > 0 ? overlap[min] : -overlap[min], 0, 0);
                                 m.Position += projection;
                                 break;
 
                             case 1:
-                                projection = new Vector3(0, -overlap[max], 0);
+                                projection = new Vector3(0, distance.Y > 0 ? overlap[min] : -overlap[min], 0);
                                 m.Position += projection;
                                 m.VelocityY = 0;
-                                if (-overlap[max] > 0)
+                                if (overlap[min] > 0)
                                 {
                                     if (!m.Floored)
                                     {
@@ -415,7 +423,7 @@ namespace ProjectHeis
                                 break;
 
                             case 2:
-                                projection = new Vector3(0, 0, -overlap[max]);
+                                projection = new Vector3(0, 0, distance.Z > 0 ? overlap[min] : -overlap[min]);
                                 m.Position += projection;
                                 break;
                         }
@@ -425,8 +433,8 @@ namespace ProjectHeis
                 }
                 if (!onElevator)
                 {
-                   // if (MediaPlayer.State != MediaState.Stopped)
-                       // MediaPlayer.Stop();
+                    // if (MediaPlayer.State != MediaState.Stopped)
+                    // MediaPlayer.Stop();
 
                     for (int i = 0; i < 20; i++)
                     {
@@ -437,10 +445,10 @@ namespace ProjectHeis
                 else
                 {
                     //if (MediaPlayer.State != MediaState.Playing)
-                       // MediaPlayer.Play(ElevatortMusic);
-                    
+                    // MediaPlayer.Play(ElevatortMusic);
+
                 }
-            }            
+            }
 
             info += "\nX: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z;
             info += "\npMin: " + player.BB.Min + ", pMax: " + player.BB.Max;
@@ -448,7 +456,7 @@ namespace ProjectHeis
             //info += "\nf2Min: " + floor2.BB.Min + ", f2Max: " + floor2.BB.Max;
             info += "\nPlayer floored: " + player.Floored;
 
-            base.Update(gameTime);
+            Camera.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
