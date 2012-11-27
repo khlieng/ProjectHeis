@@ -30,7 +30,7 @@ namespace ProjectHeis
         private GraphicsDeviceManager graphics;
         private GraphicsDevice device;
 
-        private BasicEffect effect;
+        public static BasicEffect Effect;
         private SpriteBatch spriteBatch;
 
         private KeyboardState prevKeyboard;
@@ -97,7 +97,7 @@ namespace ProjectHeis
             graphics.PreferMultiSampling = true;            
             graphics.ApplyChanges();
 
-            effect = new BasicEffect(GraphicsDevice);
+            Effect = new BasicEffect(GraphicsDevice);
 
             bloom = new BloomComponent(this);
             bloom.Settings = BloomSettings.PresetSettings[5];
@@ -127,7 +127,7 @@ namespace ProjectHeis
 
             #region Player
             player = new Entity(this, box);
-            player.Position = new Vector3(0, 100, 0);
+            player.Position = new Vector3(0, 120, 0);
             player.Controller = new KeyboardController(player);
             player.Scale = new Vector3(0.01f, 0.02f, 0.01f);
             player.Gravity = true;

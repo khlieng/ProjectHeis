@@ -28,7 +28,7 @@ namespace ProjectHeis
             if (prevKeyboard.IsKeyUp(Keys.R) &&
                 keyboard.IsKeyDown(Keys.R))
             {
-                entity.Position = new Vector3(0, 100, 0);
+                entity.Position = new Vector3(0, 120, 0);
             }
 
             if (prevKeyboard.IsKeyUp(Keys.Space) &&

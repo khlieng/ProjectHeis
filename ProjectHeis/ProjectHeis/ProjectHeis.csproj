@@ -115,6 +115,7 @@
     <Compile Include="Entity.cs" />
     <Compile Include="IController.cs" />
     <Compile Include="KeyboardController.cs" />
+    <Compile Include="ParticleEmitter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SkyDome.cs" />
