@@ -39,7 +39,8 @@ namespace ProjectHeis
 
         protected override void LoadContent()
         {
-           
+            PresentationParameters pp = GraphicsDevice.PresentationParameters;
+            refractionRenderTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, pp.DepthStencilFormat);
 
             base.LoadContent();
         }//end of LoadContent
