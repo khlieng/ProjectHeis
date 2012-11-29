@@ -9,8 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 /**
  * Terrain er basert på Tutorial fra riemers.net
  * Vi har også brukt en del fra oblig 6.
- * 
- * 
+ * samt effect filen etter oblig6
+ * Selve Terrenget er laget ut av en .BMP fil, der vi henter ut høydedata, i form av svart eller hvit.
+ * Terrenget: Terrain3.bmp er laget i photoshop.
  */ 
 namespace ProjectHeis
 {

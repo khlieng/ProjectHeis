@@ -12,12 +12,9 @@ namespace ProjectHeis
         public float Rotation { get; set; }
         private Vector3 position;
 
+
         public Texture2D Texture { get; set; }
         public float Alpha { get; set; }
-
-        
-
-       
 
         public Vector3 Position
         {

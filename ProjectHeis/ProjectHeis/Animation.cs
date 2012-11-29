@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-
+/*Annimasjons klasse som er en gameComponent
+ * Denne brukes til og lage annimasjoner
+ * 
+ */ 
 namespace ProjectHeis
 {
     public class Animation : GameComponent

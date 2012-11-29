@@ -5,6 +5,10 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+/**
+ * Partikkel effekt klassen
+ * Brukes for og lage partikkel effekter
+ **/
 namespace ProjectHeis
 {
     public class ParticleEmitter : DrawableGameComponent
