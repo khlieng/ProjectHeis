@@ -262,9 +262,14 @@ namespace ProjectHeis
             #endregion
             staticEntities.Add(shaftWall1);
             staticEntities.Add(shaftWall2);
-
+            
             Camera = new Camera(this, player);
             Camera.Initialize();
+
+
+            ParticleEmitter emitter = new ParticleEmitter(this);
+            emitter.Initialize();
+            Components.Add(emitter);
         }
 
         protected override void UnloadContent()
@@ -503,7 +508,7 @@ namespace ProjectHeis
 
         private void RequestElevator(int floor)
         {
-            if (elevatorTargetFloors.Count < 1 || elevatorTargetFloors.Peek() != currentFloor)
+            if (floor != elevatorTargetFloor && (elevatorTargetFloors.Count < 1 || elevatorTargetFloors.Peek() != currentFloor))
             {
                 elevatorTargetFloors.Enqueue(currentFloor);
             }

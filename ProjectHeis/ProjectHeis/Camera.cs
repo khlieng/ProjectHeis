@@ -17,7 +17,7 @@ namespace ProjectHeis
 
         #region Variabler
         private Entity entity;
-        private Vector3 position;
+        public Vector3 Position { get; private set; }
         private Vector3 target;
         private Vector3 up = Vector3.Up;
 
@@ -33,9 +33,9 @@ namespace ProjectHeis
             this.entity = entity;
 
             target = entity.Position;
-            position = entity.Position - entity.Direction * distance + new Vector3(0, height, 0);
+            Position = entity.Position - entity.Direction * distance + new Vector3(0, height, 0);
 
-            View = Matrix.CreateLookAt(position, target, up);
+            View = Matrix.CreateLookAt(Position, target, up);
 
             float aspectRatio = (float)Game.GraphicsDevice.Viewport.Width / (float)Game.GraphicsDevice.Viewport.Height;
             Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio, 0.01f, 20000.0f);
@@ -46,9 +46,9 @@ namespace ProjectHeis
         public override void Update(GameTime gameTime)
         {
             target = entity.Position;
-            position = entity.Position - entity.Direction * distance + new Vector3(0, height, 0);
+            Position = entity.Position - entity.Direction * distance + new Vector3(0, height, 0);
 
-            View = Matrix.CreateLookAt(position, target, up);
+            View = Matrix.CreateLookAt(Position, target, up);
 
             base.Update(gameTime);
         }
