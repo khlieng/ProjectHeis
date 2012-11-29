@@ -81,9 +81,9 @@ namespace ProjectHeis
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            bloomExtractEffect = Game.Content.Load<Effect>("BloomExtract");
-            bloomCombineEffect = Game.Content.Load<Effect>("BloomCombine");
-            gaussianBlurEffect = Game.Content.Load<Effect>("GaussianBlur");
+            bloomExtractEffect = Game.Content.Load<Effect>("Effect/BloomExtract");
+            bloomCombineEffect = Game.Content.Load<Effect>("Effect/BloomCombine");
+            gaussianBlurEffect = Game.Content.Load<Effect>("Effect/GaussianBlur");
 
             // Look up the resolution and format of our main backbuffer.
             PresentationParameters pp = GraphicsDevice.PresentationParameters;

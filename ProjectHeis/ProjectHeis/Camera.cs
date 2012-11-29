@@ -6,9 +6,7 @@ using Microsoft.Xna.Framework;
 
 /*Kamera klasse
  * Denne brukes for og sette kameraposisjoner.
- * 
- * 
- * 
+ * Klassen er en egen GameComponent
  */
 namespace ProjectHeis
 {

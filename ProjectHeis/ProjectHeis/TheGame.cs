@@ -366,7 +366,7 @@ namespace ProjectHeis
                     }
                     if (m.BB.Intersects(elevatorFronts[i]))
                     {
-                        floorNumber += "\n...og du stAr foran heisen.";
+                        floorNumber += "\n...og du stAr foran heisen. Trykk (E) for Apne\n Velg din etasje med museklikk.";
                         inFrontOfElevator = true;
 
                     }

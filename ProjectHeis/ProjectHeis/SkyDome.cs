@@ -10,8 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
  * Koden er skrevet om slik at den kan brukes i XNA 4.0
  * Texture2D er et random bilde hentet fra www.google.no
  * dome.x er selve domen med kordinater, det er den Riemers har laget.
- * 
- * 
  */
 namespace ProjectHeis
 {

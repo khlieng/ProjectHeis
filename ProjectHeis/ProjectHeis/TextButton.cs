@@ -6,6 +6,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+/*Textbutton klassen brukes for og lage knapper.
+ * Textbutton brukes nå til og representere etasjer i bygningen
+ * 
+ */
 namespace ProjectHeis
 {
     public class TextButton : DrawableGameComponent

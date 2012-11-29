@@ -16,6 +16,7 @@ namespace ProjectHeis
 
     class WaterEffect : DrawableGameComponent
     {
+       
 
         const float waterHeight = 5.0f;
         RenderTarget2D refractionRenderTarget;
@@ -61,6 +62,6 @@ namespace ProjectHeis
             Plane finalPlane = new Plane(planeCoeffs);
             return finalPlane;
         }
-
+      
     }//end of WaterEffect.cs
 }//end of nameSpace
