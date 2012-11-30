@@ -121,8 +121,8 @@ namespace ProjectHeis
            /*effect.TextureEnabled = true;
             effect.Texture = textureBuilding;*/
 
-          //  ElevatortMusic = Content.Load<Song>("Audio\\elevatorMusic");
-           // ElevatorBell = Content.Load<Song>("Audio\\ElevatorBell");
+            ElevatortMusic = Content.Load<Song>("Audio\\elevatorMusic");
+            ElevatorBell = Content.Load<Song>("Audio\\ElevatorBell");
 
 
             #region Player
@@ -159,28 +159,7 @@ namespace ProjectHeis
             wall4.Texture = textureBuilding;
             #endregion
 
-            floors = new Entity[20];
-            doors = new ElevatorDoors[20];
-            floorNumbers = new BoundingBox[20];
-            elevatorFronts = new BoundingBox[20];
-            for (int i = 0; i < floors.Length; i++)
-            {
-                floors[i] = new Entity(this, box);
-                floors[i].Position = new Vector3(0, i * 50, 0);
-                floors[i].Scale = new Vector3(0.99f, 0.02f, 0.99f);
-
-                doors[i] = new ElevatorDoors(this, i, box);
-
-                BoundingBox bb = floors[i].BB;
-                bb.Min.X -= 45;
-                bb.Max.Y += 40;
-                floorNumbers[i] = bb;
-
-                bb.Min.X += 45;
-                bb.Max.X -= 175;
-                bb.Max.Z -= 150;
-                elevatorFronts[i] = bb;
-            }
+            
 
             #region elevator
             elevator = new Entity(this, box);
@@ -207,18 +186,44 @@ namespace ProjectHeis
             SkyDome skyDome = new SkyDome(this);
             skyDome.Initialize();
             #endregion
+                        
+            #region ShaftWall(elevator shaft)
+            Entity shaftWall1 = new Entity(this, box);
+            shaftWall1.Position = new Vector3(-121, 450, -100);
+            shaftWall1.Scale = new Vector3(0.21f, 5, 0.02f);
+            //shaftWall1.Texture = Content.Load<Texture2D>("trans");
+            Entity shaftWall2 = new Entity(this, box);
+            shaftWall2.Position = new Vector3(-121, 450, -60);
+            shaftWall2.Scale = new Vector3(0.21f, 5, 0.02f);
+            //shaftWall2.Texture = Content.Load<Texture2D>("trans");
+            shaftWall1.Alpha = 0.5f;
+            shaftWall2.Alpha = 0.5f;
+            #endregion
+            staticEntities.Add(shaftWall1);
+            staticEntities.Add(shaftWall2);
 
-            #region AddDoors
-            staticEntities.Add(floor);
+            floors = new Entity[20];
+            doors = new ElevatorDoors[20];
+            floorNumbers = new BoundingBox[20];
+            elevatorFronts = new BoundingBox[20];
             for (int i = 0; i < floors.Length; i++)
             {
-                staticEntities.Add(floors[i]);
-                staticEntities.Add(doors[i].LeftDoor);
-                staticEntities.Add(doors[i].RightDoor);
-                //staticEntities.Add(doors[i * 2]);
-                //staticEntities.Add(doors[i * 2 + 1]);
+                floors[i] = new Entity(this, box);
+                floors[i].Position = new Vector3(0, i * 50, 0);
+                floors[i].Scale = new Vector3(0.99f, 0.02f, 0.99f);
+
+                doors[i] = new ElevatorDoors(this, i, box);
+
+                BoundingBox bb = floors[i].BB;
+                bb.Min.X -= 45;
+                bb.Max.Y += 40;
+                floorNumbers[i] = bb;
+
+                bb.Min.X += 45;
+                bb.Max.X -= 175;
+                bb.Max.Z -= 150;
+                elevatorFronts[i] = bb;
             }
-            #endregion
 
             #region add component
             staticEntities.Add(wall);
@@ -248,20 +253,17 @@ namespace ProjectHeis
             }
             #endregion
 
-            #region ShaftWall(elevator shaft)
-            Entity shaftWall1 = new Entity(this, box);
-            shaftWall1.Position = new Vector3(-121, 450, -100);
-            shaftWall1.Scale = new Vector3(0.21f, 5, 0.02f);
-            //shaftWall1.Texture = Content.Load<Texture2D>("trans");
-            Entity shaftWall2 = new Entity(this, box);
-            shaftWall2.Position = new Vector3(-121, 450, -60);
-            shaftWall2.Scale = new Vector3(0.21f, 5, 0.02f);
-            //shaftWall2.Texture = Content.Load<Texture2D>("trans");
-            shaftWall1.Alpha = 0.5f;
-            shaftWall2.Alpha = 0.5f;
+            #region AddDoors
+            staticEntities.Add(floor);
+            for (int i = 0; i < floors.Length; i++)
+            {
+                staticEntities.Add(floors[i]);
+                staticEntities.Add(doors[i].LeftDoor);
+                staticEntities.Add(doors[i].RightDoor);
+                //staticEntities.Add(doors[i * 2]);
+                //staticEntities.Add(doors[i * 2 + 1]);
+            }
             #endregion
-            staticEntities.Add(shaftWall1);
-            staticEntities.Add(shaftWall2);
             
             Camera = new Camera(this, player);
             Camera.Initialize();
@@ -339,6 +341,7 @@ namespace ProjectHeis
 
                 if (elevator.Position.Y == elevatorTargetY)
                 {
+                    MediaPlayer.Play(ElevatorBell);
                     OpenDoors(elevatorTargetFloor);
                     hasTarget = false;
                     cd = 3000;
@@ -438,8 +441,8 @@ namespace ProjectHeis
                 }
                 if (!onElevator)
                 {
-                    // if (MediaPlayer.State != MediaState.Stopped)
-                    // MediaPlayer.Stop();
+                     if (MediaPlayer.State != MediaState.Stopped)
+                        MediaPlayer.Stop();
 
                     for (int i = 0; i < 20; i++)
                     {
@@ -449,8 +452,8 @@ namespace ProjectHeis
                 }
                 else
                 {
-                    //if (MediaPlayer.State != MediaState.Playing)
-                    // MediaPlayer.Play(ElevatortMusic);
+                    if (MediaPlayer.State != MediaState.Playing)
+                        MediaPlayer.Play(ElevatortMusic);
 
                 }
             }
